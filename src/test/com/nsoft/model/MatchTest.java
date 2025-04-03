@@ -12,25 +12,11 @@ public class MatchTest {
     }
 
     private void runTests() {
-        testCreateMatch();
+        runCreateMatchTests();
 
-        testCreateMatch_EmptyHomeTeamName();
-
-        testCreateMatch_NullHomeTeamName();
-
-        testCreateMatch_EmptyAwayTeamName();
-
-        testCreateMatch_NullAwayTeamName();
-
-        testCreateMatch_SameHomeAndAwayTeam();
-
-        testUpdateMatch();
+        runUpdateMatchTests();
 
         testToString();
-
-        testUpdateMatch_NegativeScores(-1, 1, "Home team score cannot be negative");
-        testUpdateMatch_NegativeScores(2, -1, "Away team score cannot be negative");
-        testUpdateMatch_NegativeScores(-1, -1, "Home team score cannot be negative, Away team score cannot be negative");
     }
 
     public void testCreateMatch() {
@@ -109,5 +95,27 @@ public class MatchTest {
     public void testToString() {
         Match match = createMatch("Mexico", "Canada");
         assertEquals("Mexico 0 Canada 0", match.toString());
+    }
+
+    private void runCreateMatchTests(){
+        testCreateMatch();
+
+        testCreateMatch_EmptyHomeTeamName();
+
+        testCreateMatch_NullHomeTeamName();
+
+        testCreateMatch_EmptyAwayTeamName();
+
+        testCreateMatch_NullAwayTeamName();
+
+        testCreateMatch_SameHomeAndAwayTeam();
+    }
+
+    private void runUpdateMatchTests() {
+        testUpdateMatch();
+
+        testUpdateMatch_NegativeScores(-1, 1, "Home team score cannot be negative");
+        testUpdateMatch_NegativeScores(2, -1, "Away team score cannot be negative");
+        testUpdateMatch_NegativeScores(-1, -1, "Home team score cannot be negative, Away team score cannot be negative");
     }
 }

@@ -23,15 +23,11 @@ public class MatchServiceTest {
     }
 
     public void runTests() {
-        testStartMatch();
+        runStartMatchTests();
 
-        testStartMatch_TeamIsAlreadyPlaying();
+        runUpdateMatchTests();
 
-        testUpdateMatch();
-
-        testFinishMatch();
-
-        testFinishMatch_MatchDoesNotExist();
+        runFinishMatchTests();
     }
 
     public void testStartMatch() {
@@ -76,14 +72,80 @@ public class MatchServiceTest {
     }
 
     public void testUpdateMatch() {
-        //todo
+        Match match = createMatch("Mexico", "Canada");
+
+        matchService.startMatch(match);
+
+        Match updatedMatch = matchService.updateMatch(match, 0, 1);
+
+        assertEquals(updatedMatch, matchService.getScoreboard().get(0));
+        assertEquals(updatedMatch.getHomeTeam(), "Mexico");
+        assertEquals(updatedMatch.getAwayTeam(), "Canada");
+        assertEquals("Home team score should be updated to 0", 0, updatedMatch.getHomeTeamScore());
+        assertEquals("Away team score should be updated to 1", 1, updatedMatch.getAwayTeamScore());
+    }
+
+    public void testUpdateMatch_MatchIsFinished(){
+        Match match = createMatch("Mexico", "Canada");
+
+        matchService.startMatch(match);
+
+        matchService.finishMatch(match);
+
+        try {
+            matchService.updateMatch(match, 0, 2);
+        }
+        catch(IllegalArgumentException e){
+            assertEquals("Match not found for home team: Mexico and away team: Canada", e.getMessage());
+        }
     }
 
     public void testFinishMatch() {
-        //todo
+        Match match = createMatch("Mexico", "Canada");
+        matchService.startMatch(match);
+
+        boolean isMatchFinished = matchService.finishMatch(match);
+        assertTrue(isMatchFinished, "Match is not finished");
+        assertTrue(matchService.getScoreboard().isEmpty(), "Match is not finished");
     }
 
     public void testFinishMatch_MatchDoesNotExist() {
-        //todo
+        Match match = createMatch("Mexico", "Canada");
+        matchService.startMatch(match);
+        try {
+            matchService.finishMatch(match);
+        } catch (IllegalArgumentException e) {
+            assertTrue(matchService.getScoreboard().isEmpty(), "Match is not finished");
+        }
+    }
+
+    private void runStartMatchTests() {
+        testStartMatch();
+        tearDown();
+
+        testStartMatch_TeamIsAlreadyPlaying();
+        tearDown();
+    }
+
+    private void runUpdateMatchTests(){
+        testUpdateMatch();
+        tearDown();
+
+        testUpdateMatch_MatchIsFinished();
+        tearDown();
+    }
+
+    private void runFinishMatchTests(){
+        testFinishMatch();
+        tearDown();
+
+        testFinishMatch_MatchDoesNotExist();
+        tearDown();
+    }
+
+    private void tearDown() {
+        if (!matchService.clearScoreboard()) {
+            System.out.println("Scoreboard has not been cleared");
+        }
     }
 }
