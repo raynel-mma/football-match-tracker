@@ -111,10 +111,10 @@ public class MatchServiceTest {
 
     public void testFinishMatch_MatchDoesNotExist() {
         Match match = createMatch("Mexico", "Canada");
-        matchService.startMatch(match);
         try {
             matchService.finishMatch(match);
         } catch (IllegalArgumentException e) {
+            assertEquals("Match not found for home team: Mexico and away team: Canada", e.getMessage());
             assertTrue(matchService.getScoreboard().isEmpty(), "Match is not finished");
         }
     }

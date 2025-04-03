@@ -32,6 +32,9 @@ public class MatchService {
     }
 
     public boolean finishMatch(Match match) {
+        if (!isMatchOngoing(match)) {
+            throw new IllegalArgumentException("Match not found for home team: " + match.getHomeTeam() + " and away team: " + match.getAwayTeam());
+        }
         return scoreboard.remove(match);
     }
 
