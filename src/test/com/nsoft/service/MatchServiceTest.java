@@ -1,6 +1,12 @@
 package com.nsoft.service;
 
+import com.nsoft.model.Match;
+
 import java.util.ArrayList;
+
+import static com.nsoft.model.Match.createMatch;
+import static com.nsoft.util.AssertionUtils.assertEquals;
+import static com.nsoft.util.AssertionUtils.assertTrue;
 
 public class MatchServiceTest {
 
@@ -29,7 +35,18 @@ public class MatchServiceTest {
     }
 
     public void testStartMatch() {
-        //todo
+        Match match = createMatch("Mexico", "Canada");
+
+        matchService.startMatch(match);
+
+        assertTrue(!matchService.getScoreboard().isEmpty(), "Match was not added");
+
+        Match ongoingMatch = matchService.getScoreboard().get(0);
+
+        assertEquals(ongoingMatch.getHomeTeam(), "Mexico");
+        assertEquals(ongoingMatch.getAwayTeam(), "Canada");
+        assertEquals("Home team score should be initialized to 0", 0, ongoingMatch.getHomeTeamScore());
+        assertEquals("Away team score should be initialized to 0", 0, ongoingMatch.getAwayTeamScore());
     }
 
     /**

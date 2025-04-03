@@ -7,12 +7,17 @@ public class Match {
     private int awayTeamScore;
     private final long startTime;
 
-    public Match(String homeTeam, String awayTeam, int homeTeamScore, int awayTeamScore) {
+    public Match(String homeTeam, String awayTeam) {
         this.homeTeam = homeTeam;
         this.awayTeam = awayTeam;
-        this.homeTeamScore = homeTeamScore;
-        this.awayTeamScore = awayTeamScore;
+        this.homeTeamScore = 0;
+        this.awayTeamScore = 0;
         this.startTime = System.currentTimeMillis();
+    }
+
+    public static Match createMatch(String homeTeam, String awayTeam){
+        validateTeams(homeTeam, awayTeam);
+        return new Match(homeTeam, awayTeam);
     }
 
     public String getHomeTeam() {
@@ -54,5 +59,14 @@ public class Match {
     @Override
     public String toString() {
         return homeTeam + " " + homeTeamScore + " " + awayTeam + " " + awayTeamScore;
+    }
+
+    private static void validateTeams(String homeTeam, String awayTeam) {
+        if (homeTeam == null || homeTeam.isEmpty()) {
+            throw new IllegalArgumentException("Home team name cannot be the empty or null");
+        }
+        if (awayTeam == null || awayTeam.isEmpty()) {
+            throw new IllegalArgumentException("Away team name cannot be the empty or null");
+        }
     }
 }

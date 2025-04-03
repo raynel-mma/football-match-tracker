@@ -12,16 +12,21 @@ public class MatchService {
         this.scoreboard = scoreboard;
     }
 
-    public void startMatch(String homeTeam, String awayTeam) {
+    public void startMatch(Match matchToBeStarted) {
+        if (scoreboard.stream().anyMatch(match -> match.getAwayTeam().equals(matchToBeStarted.getAwayTeam()) || match.getHomeTeam().equals(matchToBeStarted.getHomeTeam()))) {
+            throw new IllegalArgumentException("Team " + matchToBeStarted.getAwayTeam() + " is already playing");
+        }
+
+        scoreboard.add(matchToBeStarted);
+    }
+
+    public void updateMatch(Match match, int homeTeamScore, int awayTeamScore) {
     } //todo
 
-    public void updateMatch(String homeTeam, String awayTeam, int homeTeamScore, int awayTeamScore) {
+    public void finishMatch(Match match) {
     } //todo
 
-    public void finishMatch(String homeTeam, String awayTeam) {
-    } //todo
-
-    public List<Match> getOngoingMatches() {
+    public List<Match> getScoreboard() {
         return Collections.unmodifiableList(scoreboard);
     }
 
