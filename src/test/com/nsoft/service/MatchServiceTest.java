@@ -54,7 +54,25 @@ public class MatchServiceTest {
      * Ex1. Spain - Brazil, Uruguay - Spain, Ex2. Spain - Brazil, Uruguay - Brazil
      */
     public void testStartMatch_TeamIsAlreadyPlaying() {
-        //todo
+        Match match1 = createMatch("Spain", "Brazil");
+        Match match2 = createMatch("Uruguay", "Spain");
+
+        try {
+            matchService.startMatch(match1);
+            matchService.startMatch(match2);
+        } catch (IllegalArgumentException e) {
+            assertEquals("Team Spain is already playing", e.getMessage());
+        }
+
+        Match match3 = createMatch("Spain", "Brazil");
+        Match match4 = createMatch("Uruguay", "Brazil");
+
+        try {
+            matchService.startMatch(match3);
+            matchService.startMatch(match4);
+        } catch (IllegalArgumentException e) {
+            assertEquals("Team Brazil is already playing", e.getMessage());
+        }
     }
 
     public void testUpdateMatch() {

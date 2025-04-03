@@ -80,14 +80,28 @@ public class MatchTest {
     }
 
     public void testCreateMatch_SameHomeAndAwayTeam() {
-        //todo
+        Match match = null;
+        try {
+            match = createMatch("Mexico", "Mexico");
+        } catch (IllegalArgumentException e) {
+            assertEquals("Home team name and away team name cannot be the same", e.getMessage());
+            assertTrue(match == null, "Match is not null");
+        }
     }
 
     public void testUpdateMatch() {
-        //todo
+        Match match = createMatch("Mexico", "Canada");
+
+        assertTrue(match != null, "Match should not be null");
+
+        match.updateScores(0, 1);
+
+        assertEquals(0, match.getHomeTeamScore());
+        assertEquals(1, match.getAwayTeamScore());
     }
 
     public void testToString() {
-        //todo
+        Match match = createMatch("Mexico", "Canada");
+        assertEquals("Mexico 0 Canada 0", match.toString());
     }
 }

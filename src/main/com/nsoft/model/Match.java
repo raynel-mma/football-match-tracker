@@ -20,6 +20,11 @@ public class Match {
         return new Match(homeTeam, awayTeam);
     }
 
+    public void updateScores(int homeTeamScore, int awayTeamScore) {
+        this.setHomeTeamScore(homeTeamScore);
+        this.setAwayTeamScore(awayTeamScore);
+    }
+
     public String getHomeTeam() {
         return homeTeam;
     }
@@ -67,6 +72,9 @@ public class Match {
         }
         if (awayTeam == null || awayTeam.isEmpty()) {
             throw new IllegalArgumentException("Away team name cannot be the empty or null");
+        }
+        if (homeTeam.equals(awayTeam)) {
+            throw new IllegalArgumentException("Home team name and away team name cannot be the same");
         }
     }
 }
