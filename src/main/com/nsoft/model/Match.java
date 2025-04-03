@@ -1,5 +1,8 @@
 package com.nsoft.model;
 
+import static com.nsoft.util.MatchValidator.validateScores;
+import static com.nsoft.util.MatchValidator.validateTeams;
+
 public class Match {
     private String homeTeam;
     private String awayTeam;
@@ -21,6 +24,7 @@ public class Match {
     }
 
     public void updateScores(int homeTeamScore, int awayTeamScore) {
+        validateScores(homeTeamScore, awayTeamScore);
         this.setHomeTeamScore(homeTeamScore);
         this.setAwayTeamScore(awayTeamScore);
     }
@@ -66,15 +70,4 @@ public class Match {
         return homeTeam + " " + homeTeamScore + " " + awayTeam + " " + awayTeamScore;
     }
 
-    private static void validateTeams(String homeTeam, String awayTeam) {
-        if (homeTeam == null || homeTeam.isEmpty()) {
-            throw new IllegalArgumentException("Home team name cannot be the empty or null");
-        }
-        if (awayTeam == null || awayTeam.isEmpty()) {
-            throw new IllegalArgumentException("Away team name cannot be the empty or null");
-        }
-        if (homeTeam.equals(awayTeam)) {
-            throw new IllegalArgumentException("Home team name and away team name cannot be the same");
-        }
-    }
 }

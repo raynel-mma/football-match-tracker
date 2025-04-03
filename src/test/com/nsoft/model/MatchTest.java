@@ -27,6 +27,10 @@ public class MatchTest {
         testUpdateMatch();
 
         testToString();
+
+        testUpdateMatch_NegativeScores(-1, 1, "Home team score cannot be negative");
+        testUpdateMatch_NegativeScores(2, -1, "Away team score cannot be negative");
+        testUpdateMatch_NegativeScores(-1, -1, "Home team score cannot be negative, Away team score cannot be negative");
     }
 
     public void testCreateMatch() {
@@ -40,49 +44,41 @@ public class MatchTest {
     }
 
     public void testCreateMatch_EmptyHomeTeamName() {
-        Match match = null;
         try {
-            match = createMatch("", "Canada");
+            createMatch("", "Canada");
         } catch (IllegalArgumentException e) {
             assertEquals("Home team name cannot be the empty or null", e.getMessage());
-            assertTrue(match == null, "Match is not null");
         }
     }
 
     public void testCreateMatch_NullHomeTeamName() {
-        Match match = null;
         try {
-            match = createMatch(null, "Canada");
+            createMatch(null, "Canada");
         } catch (IllegalArgumentException e) {
             assertEquals("Home team name cannot be the empty or null", e.getMessage());
-            assertTrue(match == null, "Match is not null");
         }
     }
 
     public void testCreateMatch_EmptyAwayTeamName() {
-        Match match = null;
         try {
-            match = createMatch("Mexico", "");
+            createMatch("Mexico", "");
         } catch (IllegalArgumentException e) {
             assertEquals("Away team name cannot be the empty or null", e.getMessage());
-            assertTrue(match == null, "Match is not null");
         }
     }
 
     public void testCreateMatch_NullAwayTeamName() {
-        Match match = null;
         try {
-            match = createMatch("Mexico", null);
+            createMatch("Mexico", null);
         } catch (IllegalArgumentException e) {
             assertEquals("Away team name cannot be the empty or null", e.getMessage());
-            assertTrue(match == null, "Match is not null");
         }
     }
 
     public void testCreateMatch_SameHomeAndAwayTeam() {
         Match match = null;
         try {
-            match = createMatch("Mexico", "Mexico");
+            createMatch("Mexico", "Mexico");
         } catch (IllegalArgumentException e) {
             assertEquals("Home team name and away team name cannot be the same", e.getMessage());
             assertTrue(match == null, "Match is not null");
@@ -98,6 +94,16 @@ public class MatchTest {
 
         assertEquals(0, match.getHomeTeamScore());
         assertEquals(1, match.getAwayTeamScore());
+    }
+
+    public void testUpdateMatch_NegativeScores(int homeTeamScore, int awayTeamScore, String expectedMessage) {
+        Match match = createMatch("Mexico", "Canada");
+
+        try {
+            match.updateScores(homeTeamScore, awayTeamScore);
+        } catch (IllegalArgumentException e) {
+            assertEquals(expectedMessage, e.getMessage());
+        }
     }
 
     public void testToString() {
