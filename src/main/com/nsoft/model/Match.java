@@ -1,7 +1,7 @@
 package com.nsoft.model;
 
-import static com.nsoft.util.MatchValidator.validateScores;
-import static com.nsoft.util.MatchValidator.validateTeams;
+import static com.nsoft.model.MatchValidator.validateScores;
+import static com.nsoft.model.MatchValidator.validateTeams;
 
 public class Match {
     private String homeTeam;

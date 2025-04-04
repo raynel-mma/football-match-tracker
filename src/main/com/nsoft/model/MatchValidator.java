@@ -1,4 +1,4 @@
-package com.nsoft.util;
+package com.nsoft.model;
 
 public class MatchValidator {
     private MatchValidator() {
