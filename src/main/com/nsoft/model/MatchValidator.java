@@ -35,4 +35,8 @@ public class MatchValidator {
         }
     }
 
+    public static boolean isDurationInvalid(int duration) {
+        return (duration < 0 || duration > 120);
+    }
+
 }

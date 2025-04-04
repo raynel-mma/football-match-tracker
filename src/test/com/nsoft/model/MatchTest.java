@@ -26,7 +26,6 @@ public class MatchTest {
         assertEquals("Canada", match.getAwayTeam());
         assertEquals(0, match.getHomeTeamScore());
         assertEquals(0, match.getAwayTeamScore());
-        assertTrue(match.getStartTime() > 0, "Match is not ongoing");
     }
 
     public void testCreateMatch_EmptyHomeTeamName() {

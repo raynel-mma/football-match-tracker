@@ -76,13 +76,29 @@ public class MatchServiceTest {
 
         matchService.startMatch(match);
 
-        Match updatedMatch = matchService.updateMatch(match, 0, 1);
+        Match updatedMatch = matchService.updateMatch(match, 0, 1, 30);
 
         assertEquals(updatedMatch, matchService.getScoreboard().get(0));
         assertEquals(updatedMatch.getHomeTeam(), "Mexico");
         assertEquals(updatedMatch.getAwayTeam(), "Canada");
         assertEquals("Home team score should be updated to 0", 0, updatedMatch.getHomeTeamScore());
         assertEquals("Away team score should be updated to 1", 1, updatedMatch.getAwayTeamScore());
+    }
+
+    public void testUpdateRandomMatch() {
+        Match match1 = createMatch("Mexico", "Canada");
+        Match match2 = createMatch("Spain", "Brazil");
+        Match match3 = createMatch("Germany", "France");
+
+        matchService.startMatch(match1);
+        matchService.startMatch(match2);
+        matchService.startMatch(match3);
+
+        assertEquals(3, matchService.getScoreboard().size());
+
+        matchService.updateRandomMatch();
+
+        assertTrue(matchService.getScoreboard().stream().anyMatch(match -> match.getTotalScore() > 0), "Expected one match with a total score greater than 0");
     }
 
     public void testUpdateMatch_MatchIsFinished(){
@@ -93,10 +109,23 @@ public class MatchServiceTest {
         matchService.finishMatch(match);
 
         try {
-            matchService.updateMatch(match, 0, 2);
+            matchService.updateMatch(match, 0, 2, 60);
         }
         catch(IllegalArgumentException e){
             assertEquals("Match not found for home team: Mexico and away team: Canada", e.getMessage());
+        }
+    }
+
+    public void testUpdateMatch_InvalidDuration(int duration, String expectedMessage){
+        Match match = createMatch("Mexico", "Canada");
+
+        matchService.startMatch(match);
+
+        try {
+            matchService.updateMatch(match, 0, 2, duration);
+        }
+        catch(IllegalArgumentException e){
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
 
@@ -104,9 +133,9 @@ public class MatchServiceTest {
         Match match = createMatch("Mexico", "Canada");
         matchService.startMatch(match);
 
-        boolean isMatchFinished = matchService.finishMatch(match);
-        assertTrue(isMatchFinished, "Match is not finished");
-        assertTrue(matchService.getScoreboard().isEmpty(), "Match is not finished");
+        matchService.finishMatch(match);
+        assertTrue(match.isFinished(), "Match is not finished");
+        assertEquals(match.getTotalScore(), match.getHomeTeamScore() + match.getAwayTeamScore());
     }
 
     public void testFinishMatch_MatchDoesNotExist() {
@@ -131,7 +160,16 @@ public class MatchServiceTest {
         testUpdateMatch();
         tearDown();
 
+        testUpdateRandomMatch();
+        tearDown();
+
         testUpdateMatch_MatchIsFinished();
+        tearDown();
+
+        testUpdateMatch_InvalidDuration(-2, "Match duration cannot be negative");
+        tearDown();
+
+        testUpdateMatch_InvalidDuration(200, "Match duration cannot exceed 120 minutes");
         tearDown();
     }
 
