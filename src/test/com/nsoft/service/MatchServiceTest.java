@@ -1,7 +1,6 @@
 package com.nsoft.service;
 
 import com.nsoft.model.Match;
-
 import java.util.ArrayList;
 
 import static com.nsoft.model.Match.createMatch;

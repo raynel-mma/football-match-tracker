@@ -1,6 +1,7 @@
 package com.nsoft.service;
 
 import com.nsoft.model.Match;
+import com.nsoft.util.TeamProvider;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,21 +11,25 @@ import static com.nsoft.model.MatchValidator.isDurationInvalid;
 
 public class MatchService {
     private List<Match> scoreboard;
+    private static List<String> teams;
 
-    private static List<String> TEAMS = new ArrayList<>(List.of("Mexico", "Canada", "Spain", "Brazil", "Germany", "France", "Uruguay", "Italy", "Argentina", "Australia"));
+    static {
+        teams = new ArrayList<>(TeamProvider.getTeams());
+    }
 
     public MatchService(List<Match> scoreboard) {
         this.scoreboard = scoreboard;
     }
 
     public static Match createRandomMatch() {
-        if (TEAMS.size() < 2) {
+        if (teams.size() < 2) {
             throw new IllegalStateException("Not enough teams to create matches");
         }
-        Collections.shuffle(TEAMS);
 
-        String homeTeam = TEAMS.remove(0);
-        String awayTeam = TEAMS.remove(0);
+        Collections.shuffle(teams);
+
+        String homeTeam = teams.remove(0);
+        String awayTeam = teams.remove(0);
 
         return createMatch(homeTeam, awayTeam);
     }
@@ -55,15 +60,18 @@ public class MatchService {
     }
 
     public Match updateRandomMatch() {
-        Random random = new Random();
+        if (!scoreboard.isEmpty()) {
+            Random random = new Random();
 
-        Match match = scoreboard.get(random.nextInt(scoreboard.size()));
+            Match match = scoreboard.get(random.nextInt(scoreboard.size()));
 
-        int newHomeTeamScore = match.getHomeTeamScore() + random.nextInt(2);
-        int newAwayTeamScore = match.getAwayTeamScore() + random.nextInt(2);
-        int newDuration = match.getDuration() + random.nextInt(60);
+            int newHomeTeamScore = match.getHomeTeamScore() + random.nextInt(2);
+            int newAwayTeamScore = match.getAwayTeamScore() + random.nextInt(2);
+            int newDuration = match.getDuration() + random.nextInt(60);
 
-        return updateMatch(match, newHomeTeamScore, newAwayTeamScore, newDuration);
+            return updateMatch(match, newHomeTeamScore, newAwayTeamScore, newDuration);
+        }
+        return null;
     }
 
     public Match finishMatch(Match match) {
@@ -95,7 +103,12 @@ public class MatchService {
         return scoreboard.isEmpty();
     }
 
-    public static List<String> getTeams() {
-        return Collections.unmodifiableList(TEAMS);
+    public static boolean resetTeamsList() {
+        if (!teams.equals(TeamProvider.getTeams())) {
+            teams = new ArrayList<>(TeamProvider.getTeams());
+            return true;
+        }
+        return false;
     }
+
 }

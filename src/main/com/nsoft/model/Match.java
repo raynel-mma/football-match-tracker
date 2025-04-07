@@ -21,7 +21,7 @@ public class Match {
     private int totalScore;
     private boolean isFinished;
 
-    private static final Logger logger = Logger.getLogger(Match.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(Match.class.getName());
 
     private Match(String homeTeam, String awayTeam) {
         this.homeTeam = homeTeam;
@@ -104,7 +104,7 @@ public class Match {
 
     @Override
     public String toString() {
-        logger.info(homeTeam + " " + homeTeamScore + " " + awayTeam + " " + awayTeamScore + " Start time: " + startTime + ", Duration: " + duration);
+        LOGGER.info(homeTeam + " " + homeTeamScore + " " + awayTeam + " " + awayTeamScore + " Start time: " + startTime + ", Duration: " + duration);
 
         return homeTeam + " " + homeTeamScore + " " + awayTeam + " " + awayTeamScore;
     }
@@ -123,7 +123,7 @@ public class Match {
             FileHandler fileHandler = new FileHandler(logFilePath, true);
             fileHandler.setFormatter(new SimpleFormatter());
 
-            logger.addHandler(fileHandler);
+            LOGGER.addHandler(fileHandler);
 
         } catch (IOException e) {
             e.printStackTrace();
