@@ -17,7 +17,8 @@
 
 3. **Compile the code (Java 11+ required)**:
    ```bash
-   javac -d out src/com/nsoft/**/*.java
+   dir /s /b *.java > sources.txt
+   javac -d out @sources.txt
    
 4. **Run your main simulation class**:
    ```bash
